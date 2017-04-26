@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace StrubT {
 
-	internal class ConsoleConfigResetter : IDisposable {
+	class ConsoleConfigResetter : IDisposable {
 
 		static object @lock = new object();
 		bool lockTaken = false;
