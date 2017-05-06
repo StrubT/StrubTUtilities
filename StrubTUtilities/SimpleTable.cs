@@ -112,7 +112,7 @@ namespace StrubT {
 
 			public Row(Table<T> table, IEnumerable<T> values) : this(table, values is List<T> ? (List<T>)values : values.ToList()) { }
 
-			private Row(Table<T> table, IReadOnlyList<T> values) {
+			Row(Table<T> table, IReadOnlyList<T> values) {
 
 				Table = table;
 				Values = values;
