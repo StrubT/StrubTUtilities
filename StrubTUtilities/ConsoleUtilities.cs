@@ -1,11 +1,86 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
+using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace StrubT {
 
 	public static class ConsoleUtilities {
+
+		#region kernel32
+
+		const int ParentProcessID = -1;
+
+		const int HideWindowCommand = 0;
+		const int ShowWindowCommand = 5;
+
+		const uint CloseMenuItemID = 0xF060;
+		const uint MenuItemCommand = 1;
+
+		[DllImport("kernel32.dll", SetLastError = true)]
+		static extern bool AllocConsole();
+
+		[DllImport("kernel32.dll")]
+		static extern bool AttachConsole(int dwProcessId);
+
+		[DllImport("kernel32.dll")]
+		static extern IntPtr GetConsoleWindow();
+
+		[DllImport("user32.dll")]
+		static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+		[DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+		static extern bool SetWindowText(IntPtr hwnd, string lpString);
+
+		[DllImport("user32.dll")]
+		static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
+
+		[DllImport("user32.dll")]
+		static extern bool EnableMenuItem(IntPtr hMenu, uint uIDEnableItem, uint uEnable);
+
+		[DllImport("kernel32.dll", SetLastError = true)]
+		static extern bool SetConsoleIcon(IntPtr hIcon);
+
+		/// <remarks>
+		/// redirect console output to parent process;
+		/// must be before any calls to Console.WriteLine()
+		/// </remarks>
+		public static void AttachConsoleWindow() => AttachConsole(ParentProcessID);
+
+		public static void ShowConsoleWindow() {
+
+			var handle = GetConsoleWindow();
+			if (handle == IntPtr.Zero)
+				AllocConsole();
+			else
+				ShowWindow(handle, ShowWindowCommand);
+		}
+
+		public static void HideConsoleWindow() {
+
+			var handle = GetConsoleWindow();
+			ShowWindow(handle, HideWindowCommand);
+		}
+
+		public static void SetWindowText(string text) {
+
+			var handle = GetConsoleWindow();
+			SetWindowText(handle, text);
+		}
+
+		public static void DisableCloseButton() {
+
+			var handle = GetConsoleWindow();
+			var hmenu = GetSystemMenu(handle, false);
+			EnableMenuItem(hmenu, CloseMenuItemID, MenuItemCommand);
+		}
+
+		public static void SetConsoleIcon(Icon icon) => SetConsoleIcon(icon.Handle);
+		#endregion
+
+		#region Print[List|Table]
 
 		public static void PrintList(string title, params string[] items) => PrintList(title, items.AsEnumerable());
 
@@ -110,5 +185,6 @@ PrintTable_NotSqlDecimal:
 			Console.WriteLine();
 			Console.WriteLine();
 		}
+		#endregion
 	}
 }
