@@ -91,7 +91,8 @@ namespace StrubT {
 			Console.WriteLine("*** {0} ***", title);
 			Console.WriteLine();
 
-			Console.WriteLine(string.Join(Environment.NewLine, items));
+			foreach (var item in items)
+				Console.WriteLine(item);
 
 			Console.WriteLine();
 			Console.WriteLine();
