@@ -128,44 +128,37 @@ namespace StrubT {
 
 			var columnInfo = Enumerable.Range(0, table.Columns.Count).Select(c => {
 				var isNumeric = true;
-				//var maxPrecision = 0;
 				var maxScale = 0;
 
 				for (var r = 0; r < table.Rows.Count; r++) {
-					var v = table.Rows[r].Values[c];
 
-					sbyte? sb; byte? ub;
-					short? ss; ushort? us;
-					int? si; uint? ui;
-					long? sl; ulong? ul;
-					decimal? m; SqlDecimal sql;
-					if ((sb = v as sbyte?).HasValue) { sql = new SqlDecimal(sb.Value); goto PrintTable_SqlDecimal; }
-					if ((ub = v as byte?).HasValue) { sql = new SqlDecimal(ub.Value); goto PrintTable_SqlDecimal; }
-					if ((ss = v as short?).HasValue) { sql = new SqlDecimal(ss.Value); goto PrintTable_SqlDecimal; }
-					if ((us = v as ushort?).HasValue) { sql = new SqlDecimal(us.Value); goto PrintTable_SqlDecimal; }
-					if ((si = v as int?).HasValue) { sql = new SqlDecimal(si.Value); goto PrintTable_SqlDecimal; }
-					if ((ui = v as uint?).HasValue) { sql = new SqlDecimal(ui.Value); goto PrintTable_SqlDecimal; }
-					if ((sl = v as long?).HasValue) { sql = new SqlDecimal(sl.Value); goto PrintTable_SqlDecimal; }
-					if ((ul = v as ulong?).HasValue) { sql = new SqlDecimal(Convert.ToDecimal(ul.Value)); goto PrintTable_SqlDecimal; }
-					if ((m = v as decimal?).HasValue) { sql = new SqlDecimal(m.Value); goto PrintTable_SqlDecimal; }
-					goto PrintTable_NotSqlDecimal;
-
+					switch ((object)table.Rows[r].Values[c]) {
+						case sbyte sb: var sql = new SqlDecimal(sb); goto PrintTable_SqlDecimal;
+						case byte ub: sql = new SqlDecimal(ub); goto PrintTable_SqlDecimal;
+						case short ss: sql = new SqlDecimal(ss); goto PrintTable_SqlDecimal;
+						case ushort us: sql = new SqlDecimal(us); goto PrintTable_SqlDecimal;
+						case int si: sql = new SqlDecimal(si); goto PrintTable_SqlDecimal;
+						case uint ui: sql = new SqlDecimal(ui); goto PrintTable_SqlDecimal;
+						case long sl: sql = new SqlDecimal(sl); goto PrintTable_SqlDecimal;
+						case ulong ul: sql = new SqlDecimal(Convert.ToDecimal(ul)); goto PrintTable_SqlDecimal;
+						case decimal m:
+							sql = new SqlDecimal(m);
 PrintTable_SqlDecimal:
-//maxPrecision = Math.Max(maxPrecision, sql.Precision - sql.Scale);
-					maxScale = Math.Max(maxScale, sql.Scale);
-					continue;
+							maxScale = Math.Max(maxScale, sql.Scale);
+							break;
 
-PrintTable_NotSqlDecimal:
-					if (v is float || v is double) {
-						//var s = v.ToString();
-						//var i = s.IndexOf(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
-						//maxPrecision = Math.Max(maxPrecision, i < 0 ? s.Length : s.Length - i);
-						maxScale = Math.Max(maxScale, 3); //constant floating-point precision
-					} else
-						isNumeric = false;
+						case float f:
+						case double d:
+							maxScale = Math.Max(maxScale, 3); //constant floating-point precision
+							break;
+
+						default:
+							isNumeric = false;
+							break;
+					}
 				}
 
-				return new { IsNumeric = isNumeric, /*MaxPrecision = maxPrecision,*/ MaxScale = maxScale };
+				return (IsNumeric: isNumeric, MaxScale: maxScale);
 			}).ToList();
 
 			var values = table.Rows.Select(r => r.Values.Select((v, i) => {
