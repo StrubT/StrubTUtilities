@@ -11,6 +11,7 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)CachedEnumerable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConsoleConfigResetter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FSharpExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)MyComparer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ConsoleUtilities.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ReadOnlyCollections.cs" />
