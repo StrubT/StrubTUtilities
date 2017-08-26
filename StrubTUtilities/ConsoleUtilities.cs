@@ -132,7 +132,7 @@ namespace StrubT {
 
 				for (var r = 0; r < table.Rows.Count; r++) {
 
-					switch ((object)table.Rows[r].Values[c]) {
+					switch (table.Rows[r].Values[c]) {
 						case sbyte sb: var sql = new SqlDecimal(sb); goto PrintTable_SqlDecimal;
 						case byte ub: sql = new SqlDecimal(ub); goto PrintTable_SqlDecimal;
 						case short ss: sql = new SqlDecimal(ss); goto PrintTable_SqlDecimal;

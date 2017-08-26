@@ -12,9 +12,9 @@ namespace StrubT {
 
 		public static bool HasValue<T>(this FSharpOption<T> option) => FSharpOption<T>.get_IsSome(option);
 
-		public static T? AsNullable<T>(this FSharpOption<T> option) where T : struct => option.HasValue() ? option.Value : default(T?);
+		public static T? AsNullable<T>(this FSharpOption<T> option) where T : struct => option.HasValue() ? option.Value : default;
 
-		public static T GetValueOrDefault<T>(this FSharpOption<T> option, T @default = default(T)) => option.HasValue() ? option.Value : @default;
+		public static T GetValueOrDefault<T>(this FSharpOption<T> option, T @default = default) => option.HasValue() ? option.Value : @default;
 
 		public static FSharpOption<T> AsOption<T>(this T value) => value != null ? FSharpOption<T>.Some(value) : FSharpOption<T>.None;
 
@@ -44,9 +44,9 @@ namespace StrubT {
 
 		public static object GetChoice<T1, T2>(this FSharpChoice<T1, T2> choice, int n) => TryGetChoiceHelper(choice, n, out var item) ? item : null;
 
-		public static T1 GetChoice1<T1, T2>(this FSharpChoice<T1, T2> choice) => choice is FSharpChoice<T1, T2>.Choice1Of2 c ? c.Item : default(T1);
+		public static T1 GetChoice1<T1, T2>(this FSharpChoice<T1, T2> choice) => choice is FSharpChoice<T1, T2>.Choice1Of2 c ? c.Item : default;
 
-		public static T2 GetChoice2<T1, T2>(this FSharpChoice<T1, T2> choice) => choice is FSharpChoice<T1, T2>.Choice2Of2 c ? c.Item : default(T2);
+		public static T2 GetChoice2<T1, T2>(this FSharpChoice<T1, T2> choice) => choice is FSharpChoice<T1, T2>.Choice2Of2 c ? c.Item : default;
 
 		#region other choices
 
@@ -54,71 +54,71 @@ namespace StrubT {
 
 		public static object GetChoice<T1, T2, T3>(this FSharpChoice<T1, T2, T3> choice, int n) => TryGetChoiceHelper(choice, n, out var item) ? item : null;
 
-		public static T1 GetChoice1<T1, T2, T3>(this FSharpChoice<T1, T2, T3> choice) => choice is FSharpChoice<T1, T2, T3>.Choice1Of3 c ? c.Item : default(T1);
+		public static T1 GetChoice1<T1, T2, T3>(this FSharpChoice<T1, T2, T3> choice) => choice is FSharpChoice<T1, T2, T3>.Choice1Of3 c ? c.Item : default;
 
-		public static T2 GetChoice2<T1, T2, T3>(this FSharpChoice<T1, T2, T3> choice) => choice is FSharpChoice<T1, T2, T3>.Choice2Of3 c ? c.Item : default(T2);
+		public static T2 GetChoice2<T1, T2, T3>(this FSharpChoice<T1, T2, T3> choice) => choice is FSharpChoice<T1, T2, T3>.Choice2Of3 c ? c.Item : default;
 
-		public static T3 GetChoice3<T1, T2, T3>(this FSharpChoice<T1, T2, T3> choice) => choice is FSharpChoice<T1, T2, T3>.Choice3Of3 c ? c.Item : default(T3);
+		public static T3 GetChoice3<T1, T2, T3>(this FSharpChoice<T1, T2, T3> choice) => choice is FSharpChoice<T1, T2, T3>.Choice3Of3 c ? c.Item : default;
 
 		public static bool TryGetChoice<T1, T2, T3, T4>(this FSharpChoice<T1, T2, T3, T4> choice, int n, out object item) => TryGetChoiceHelper(choice, n, out item);
 
 		public static object GetChoice<T1, T2, T3, T4>(this FSharpChoice<T1, T2, T3, T4> choice, int n) => TryGetChoiceHelper(choice, n, out var item) ? item : null;
 
-		public static T1 GetChoice1<T1, T2, T3, T4>(this FSharpChoice<T1, T2, T3, T4> choice) => choice is FSharpChoice<T1, T2, T3, T4>.Choice1Of4 c ? c.Item : default(T1);
+		public static T1 GetChoice1<T1, T2, T3, T4>(this FSharpChoice<T1, T2, T3, T4> choice) => choice is FSharpChoice<T1, T2, T3, T4>.Choice1Of4 c ? c.Item : default;
 
-		public static T2 GetChoice2<T1, T2, T3, T4>(this FSharpChoice<T1, T2, T3, T4> choice) => choice is FSharpChoice<T1, T2, T3, T4>.Choice2Of4 c ? c.Item : default(T2);
+		public static T2 GetChoice2<T1, T2, T3, T4>(this FSharpChoice<T1, T2, T3, T4> choice) => choice is FSharpChoice<T1, T2, T3, T4>.Choice2Of4 c ? c.Item : default;
 
-		public static T3 GetChoice3<T1, T2, T3, T4>(this FSharpChoice<T1, T2, T3, T4> choice) => choice is FSharpChoice<T1, T2, T3, T4>.Choice3Of4 c ? c.Item : default(T3);
+		public static T3 GetChoice3<T1, T2, T3, T4>(this FSharpChoice<T1, T2, T3, T4> choice) => choice is FSharpChoice<T1, T2, T3, T4>.Choice3Of4 c ? c.Item : default;
 
-		public static T4 GetChoice4<T1, T2, T3, T4>(this FSharpChoice<T1, T2, T3, T4> choice) => choice is FSharpChoice<T1, T2, T3, T4>.Choice4Of4 c ? c.Item : default(T4);
+		public static T4 GetChoice4<T1, T2, T3, T4>(this FSharpChoice<T1, T2, T3, T4> choice) => choice is FSharpChoice<T1, T2, T3, T4>.Choice4Of4 c ? c.Item : default;
 
 		public static bool TryGetChoice<T1, T2, T3, T4, T5>(this FSharpChoice<T1, T2, T3, T4, T5> choice, int n, out object item) => TryGetChoiceHelper(choice, n, out item);
 
 		public static object GetChoice<T1, T2, T3, T4, T5>(this FSharpChoice<T1, T2, T3, T4, T5> choice, int n) => TryGetChoiceHelper(choice, n, out var item) ? item : null;
 
-		public static T1 GetChoice1<T1, T2, T3, T4, T5>(this FSharpChoice<T1, T2, T3, T4, T5> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5>.Choice1Of5 c ? c.Item : default(T1);
+		public static T1 GetChoice1<T1, T2, T3, T4, T5>(this FSharpChoice<T1, T2, T3, T4, T5> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5>.Choice1Of5 c ? c.Item : default;
 
-		public static T2 GetChoice2<T1, T2, T3, T4, T5>(this FSharpChoice<T1, T2, T3, T4, T5> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5>.Choice2Of5 c ? c.Item : default(T2);
+		public static T2 GetChoice2<T1, T2, T3, T4, T5>(this FSharpChoice<T1, T2, T3, T4, T5> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5>.Choice2Of5 c ? c.Item : default;
 
-		public static T3 GetChoice3<T1, T2, T3, T4, T5>(this FSharpChoice<T1, T2, T3, T4, T5> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5>.Choice3Of5 c ? c.Item : default(T3);
+		public static T3 GetChoice3<T1, T2, T3, T4, T5>(this FSharpChoice<T1, T2, T3, T4, T5> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5>.Choice3Of5 c ? c.Item : default;
 
-		public static T4 GetChoice4<T1, T2, T3, T4, T5>(this FSharpChoice<T1, T2, T3, T4, T5> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5>.Choice4Of5 c ? c.Item : default(T4);
+		public static T4 GetChoice4<T1, T2, T3, T4, T5>(this FSharpChoice<T1, T2, T3, T4, T5> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5>.Choice4Of5 c ? c.Item : default;
 
-		public static T5 GetChoice5<T1, T2, T3, T4, T5>(this FSharpChoice<T1, T2, T3, T4, T5> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5>.Choice5Of5 c ? c.Item : default(T5);
+		public static T5 GetChoice5<T1, T2, T3, T4, T5>(this FSharpChoice<T1, T2, T3, T4, T5> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5>.Choice5Of5 c ? c.Item : default;
 
 		public static bool TryGetChoice<T1, T2, T3, T4, T5, T6>(this FSharpChoice<T1, T2, T3, T4, T5, T6> choice, int n, out object item) => TryGetChoiceHelper(choice, n, out item);
 
 		public static object GetChoice<T1, T2, T3, T4, T5, T6>(this FSharpChoice<T1, T2, T3, T4, T5, T6> choice, int n) => TryGetChoiceHelper(choice, n, out var item) ? item : null;
 
-		public static T1 GetChoice1<T1, T2, T3, T4, T5, T6>(this FSharpChoice<T1, T2, T3, T4, T5, T6> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6>.Choice1Of6 c ? c.Item : default(T1);
+		public static T1 GetChoice1<T1, T2, T3, T4, T5, T6>(this FSharpChoice<T1, T2, T3, T4, T5, T6> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6>.Choice1Of6 c ? c.Item : default;
 
-		public static T2 GetChoice2<T1, T2, T3, T4, T5, T6>(this FSharpChoice<T1, T2, T3, T4, T5, T6> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6>.Choice2Of6 c ? c.Item : default(T2);
+		public static T2 GetChoice2<T1, T2, T3, T4, T5, T6>(this FSharpChoice<T1, T2, T3, T4, T5, T6> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6>.Choice2Of6 c ? c.Item : default;
 
-		public static T3 GetChoice3<T1, T2, T3, T4, T5, T6>(this FSharpChoice<T1, T2, T3, T4, T5, T6> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6>.Choice3Of6 c ? c.Item : default(T3);
+		public static T3 GetChoice3<T1, T2, T3, T4, T5, T6>(this FSharpChoice<T1, T2, T3, T4, T5, T6> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6>.Choice3Of6 c ? c.Item : default;
 
-		public static T4 GetChoice4<T1, T2, T3, T4, T5, T6>(this FSharpChoice<T1, T2, T3, T4, T5, T6> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6>.Choice4Of6 c ? c.Item : default(T4);
+		public static T4 GetChoice4<T1, T2, T3, T4, T5, T6>(this FSharpChoice<T1, T2, T3, T4, T5, T6> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6>.Choice4Of6 c ? c.Item : default;
 
-		public static T5 GetChoice5<T1, T2, T3, T4, T5, T6>(this FSharpChoice<T1, T2, T3, T4, T5, T6> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6>.Choice5Of6 c ? c.Item : default(T5);
+		public static T5 GetChoice5<T1, T2, T3, T4, T5, T6>(this FSharpChoice<T1, T2, T3, T4, T5, T6> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6>.Choice5Of6 c ? c.Item : default;
 
-		public static T6 GetChoice6<T1, T2, T3, T4, T5, T6>(this FSharpChoice<T1, T2, T3, T4, T5, T6> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6>.Choice6Of6 c ? c.Item : default(T6);
+		public static T6 GetChoice6<T1, T2, T3, T4, T5, T6>(this FSharpChoice<T1, T2, T3, T4, T5, T6> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6>.Choice6Of6 c ? c.Item : default;
 
 		public static bool TryGetChoice<T1, T2, T3, T4, T5, T6, T7>(this FSharpChoice<T1, T2, T3, T4, T5, T6, T7> choice, int n, out object item) => TryGetChoiceHelper(choice, n, out item);
 
 		public static object GetChoice<T1, T2, T3, T4, T5, T6, T7>(this FSharpChoice<T1, T2, T3, T4, T5, T6, T7> choice, int n) => TryGetChoiceHelper(choice, n, out var item) ? item : null;
 
-		public static T1 GetChoice1<T1, T2, T3, T4, T5, T6, T7>(this FSharpChoice<T1, T2, T3, T4, T5, T6, T7> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6, T7>.Choice1Of7 c ? c.Item : default(T1);
+		public static T1 GetChoice1<T1, T2, T3, T4, T5, T6, T7>(this FSharpChoice<T1, T2, T3, T4, T5, T6, T7> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6, T7>.Choice1Of7 c ? c.Item : default;
 
-		public static T2 GetChoice2<T1, T2, T3, T4, T5, T6, T7>(this FSharpChoice<T1, T2, T3, T4, T5, T6, T7> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6, T7>.Choice2Of7 c ? c.Item : default(T2);
+		public static T2 GetChoice2<T1, T2, T3, T4, T5, T6, T7>(this FSharpChoice<T1, T2, T3, T4, T5, T6, T7> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6, T7>.Choice2Of7 c ? c.Item : default;
 
-		public static T3 GetChoice3<T1, T2, T3, T4, T5, T6, T7>(this FSharpChoice<T1, T2, T3, T4, T5, T6, T7> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6, T7>.Choice3Of7 c ? c.Item : default(T3);
+		public static T3 GetChoice3<T1, T2, T3, T4, T5, T6, T7>(this FSharpChoice<T1, T2, T3, T4, T5, T6, T7> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6, T7>.Choice3Of7 c ? c.Item : default;
 
-		public static T4 GetChoice4<T1, T2, T3, T4, T5, T6, T7>(this FSharpChoice<T1, T2, T3, T4, T5, T6, T7> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6, T7>.Choice4Of7 c ? c.Item : default(T4);
+		public static T4 GetChoice4<T1, T2, T3, T4, T5, T6, T7>(this FSharpChoice<T1, T2, T3, T4, T5, T6, T7> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6, T7>.Choice4Of7 c ? c.Item : default;
 
-		public static T5 GetChoice5<T1, T2, T3, T4, T5, T6, T7>(this FSharpChoice<T1, T2, T3, T4, T5, T6, T7> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6, T7>.Choice5Of7 c ? c.Item : default(T5);
+		public static T5 GetChoice5<T1, T2, T3, T4, T5, T6, T7>(this FSharpChoice<T1, T2, T3, T4, T5, T6, T7> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6, T7>.Choice5Of7 c ? c.Item : default;
 
-		public static T6 GetChoice6<T1, T2, T3, T4, T5, T6, T7>(this FSharpChoice<T1, T2, T3, T4, T5, T6, T7> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6, T7>.Choice6Of7 c ? c.Item : default(T6);
+		public static T6 GetChoice6<T1, T2, T3, T4, T5, T6, T7>(this FSharpChoice<T1, T2, T3, T4, T5, T6, T7> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6, T7>.Choice6Of7 c ? c.Item : default;
 
-		public static T7 GetChoice7<T1, T2, T3, T4, T5, T6, T7>(this FSharpChoice<T1, T2, T3, T4, T5, T6, T7> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6, T7>.Choice7Of7 c ? c.Item : default(T7);
+		public static T7 GetChoice7<T1, T2, T3, T4, T5, T6, T7>(this FSharpChoice<T1, T2, T3, T4, T5, T6, T7> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6, T7>.Choice7Of7 c ? c.Item : default;
 		#endregion
 
 		// COLLECTIONS //
