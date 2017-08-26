@@ -7,6 +7,12 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "StrubTUtilities", "StrubTUt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App", "App\App.csproj", "{2B5D92F6-5CF1-44C0-8124-04B8927F5CE8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C37580BF-1EE4-4A6F-BA10-293141A3D010}"
+	ProjectSection(SolutionItems) = preProject
+		LICENCE = LICENCE
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		StrubTUtilities\StrubTUtilities.projitems*{2b5d92f6-5cf1-44c0-8124-04b8927f5ce8}*SharedItemsImports = 4
