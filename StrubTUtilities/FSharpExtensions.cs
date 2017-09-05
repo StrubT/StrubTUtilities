@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if ENABLE_FSHARP_CORE
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Microsoft.FSharp.Collections;
@@ -227,3 +229,4 @@ namespace StrubT {
 		#endregion
 	}
 }
+#endif
