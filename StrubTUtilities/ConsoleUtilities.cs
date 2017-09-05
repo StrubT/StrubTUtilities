@@ -1,15 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
-using System.Drawing;
 using System.Linq;
+
+#if ENABLE_KERNEL32_DLL
+
 using System.Runtime.InteropServices;
+
+#if ENABLE_SYSTEM_DRAWING
+
+using System.Drawing;
+#endif
+#endif
 
 namespace StrubT {
 
 	public static class ConsoleUtilities {
 
 		#region kernel32
+#if ENABLE_KERNEL32_DLL
 
 		// SOURCE: http://stackoverflow.com/a/24040827/1325979
 
@@ -79,7 +88,11 @@ namespace StrubT {
 			EnableMenuItem(hmenu, CloseMenuItemID, MenuItemCommand);
 		}
 
+#if ENABLE_SYSTEM_DRAWING
+
 		public static void SetIcon(Icon icon) => SetConsoleIcon(icon.Handle);
+#endif
+#endif
 		#endregion
 
 		#region Print[List|Table]
