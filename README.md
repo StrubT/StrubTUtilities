@@ -13,6 +13,16 @@ All of the utilities are available in the following versions of the C# programmi
 Please note that for simplicity every branch contains a Visual Studio 2017 solution
 with a shared project as well as an empty console application with the correct C# language version.
 
+## Pre-processor Directives
+
+A number of pre-processor directives have been defined to enable advanced features.
+Most of these features will require you to add additional references to your project.
+* Advanced console utilities
+  * `ENABLE_KERNEL32_DLL` (depends on *kernel32.dll*)
+  * `ENABLE_SYSTEM_DRAWING` (depends on *System.Drawing.dll*)
+* F# utilities
+  * `ENABLE_FSHARP_CORE` (depends on *FSharp.Core.dll* – i.e. add [*FSharp.Core* from NuGet](https://www.nuget.org/packages/FSharp.Core/))
+
 ## Usage
 
 * I suggest that you add this repository as a git submodule (with `-b csharp-<language version>`).
