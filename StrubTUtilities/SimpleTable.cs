@@ -33,12 +33,13 @@ namespace StrubT {
 
 	class Table<T> : IReadOnlyTable<T> {
 
-		readonly List<Column> _columns = new List<Column>();
-		readonly List<Row> _rows = new List<Row>();
-
 		public string Name { get; }
 
+		List<Column> _columns { get; } = new List<Column>();
+
 		public IReadOnlyList<IReadOnlyColumn<T>> Columns => _columns;
+
+		List<Row> _rows { get; } = new List<Row>();
 
 		public IReadOnlyList<IReadOnlyRow<T>> Rows => _rows;
 
