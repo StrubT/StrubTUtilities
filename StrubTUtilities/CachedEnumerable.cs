@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace StrubT {
 
-	public class CachedEnumerable<T> : IEnumerable<T> {
+	class CachedEnumerable<T> : IEnumerable<T> {
 
 		IEnumerator<T> enumerator;
 		bool? isEmpty;
@@ -38,7 +38,7 @@ namespace StrubT {
 		}
 	}
 
-	public static class CachedEnumerableExtensions {
+	static class CachedEnumerableExtensions {
 
 		public static IEnumerable<T> AsCached<T>(this IEnumerable<T> enumerable) => enumerable as CachedEnumerable<T> ?? new CachedEnumerable<T>(enumerable);
 
