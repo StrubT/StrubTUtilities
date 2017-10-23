@@ -73,7 +73,7 @@ namespace StrubT {
 					throw new IndexOutOfRangeException();
 		}
 
-		public override string ToString() { return string.Format("Table<{0}>[{1}x{2}] '{Name}' ({3})", typeof(T).Name, _rows.Count, _columns.Count, string.Join(", ", _columns.Select(c => c.Name))); }
+		public override string ToString() { return string.Format("Table<{0}>[{1}x{2}] '{3}' ({4})", typeof(T).Name, _rows.Count, _columns.Count, _name, string.Join(", ", _columns.Select(c => c.Name))); }
 
 		class Column : IReadOnlyColumn<T> {
 
