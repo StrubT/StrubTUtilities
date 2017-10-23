@@ -174,7 +174,7 @@ namespace StrubT {
 	}
 
 	[Flags]
-	public enum ConsoleConfigScope {
+	enum ConsoleConfigScope {
 
 		Colors = 0x1,
 		Title = 0x2,

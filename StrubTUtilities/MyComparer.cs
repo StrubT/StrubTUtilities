@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace StrubT {
 
-	public class MyComparer<T> : Comparer<T> {
+	class MyComparer<T> : Comparer<T> {
 
 		readonly Func<T, T, int> comparer;
 
@@ -24,7 +24,7 @@ namespace StrubT {
 		}
 	}
 
-	public class MyEqualityComparer<T> : EqualityComparer<T> {
+	class MyEqualityComparer<T> : EqualityComparer<T> {
 
 		readonly static Func<T, int> hashZero = _ => 0;
 		readonly static MyEqualityComparer<T> _defaultWithoutHash = new MyEqualityComparer<T>((x, y) => x.Equals(y));
