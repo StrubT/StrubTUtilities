@@ -8,7 +8,7 @@ using Microsoft.FSharp.Core;
 
 namespace StrubT {
 
-	public static class FSharpExtensions {
+	static class FSharpExtensions {
 
 		// OPTION //
 

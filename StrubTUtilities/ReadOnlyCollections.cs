@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace StrubT {
 
-	public static class ReadOnlyExtensions {
+	static class ReadOnlyExtensions {
 
 		public static IReadOnlyCollection<T> AsReadOnly<T>(this ICollection<T> collection) => collection as IReadOnlyCollection<T> ?? new CollectionProxy<T>(collection);
 
