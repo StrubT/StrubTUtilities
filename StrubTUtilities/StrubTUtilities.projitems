@@ -17,5 +17,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)ConsoleUtilities.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ReadOnlyCollections.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)SimpleTable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SimpleTree.cs" />
   </ItemGroup>
 </Project>
