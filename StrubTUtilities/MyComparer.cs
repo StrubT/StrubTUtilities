@@ -16,9 +16,9 @@ namespace StrubT {
 
 		public override int Compare(T first, T second) {
 
-			if (ReferenceEquals(second, null)) return -1;
 			if (ReferenceEquals(first, second)) return 0;
 			if (ReferenceEquals(first, null)) return 1;
+			if (ReferenceEquals(second, null)) return -1;
 
 			return comparer(first, second);
 		}
