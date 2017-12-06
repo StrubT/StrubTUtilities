@@ -22,7 +22,7 @@
     <DefineConstants>TRACE;DEBUG;ENABLE_KERNEL32_DLL;ENABLE_SYSTEM_DRAWING;ENABLE_FSHARP_CORE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>7.1</LangVersion>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
