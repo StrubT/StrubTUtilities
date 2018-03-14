@@ -121,7 +121,7 @@ namespace StrubT {
 
 			var cells = values.Select(l => {
 				var row = l.Select((v, i) => {
-					if (v is IFormattable && formats != null && formats.Count >= i && !string.IsNullOrEmpty(formats[i]))
+					if (v is IFormattable && formats?.Count >= i && !string.IsNullOrEmpty(formats[i]))
 						return (object)((IFormattable)v).ToString(formats[i], null);
 					return v;
 				}).ToList();
@@ -185,7 +185,7 @@ PrintTable_NotSqlDecimal:
 				return v?.ToString();
 			}).ToList()).ToList();
 
-			var columnWidths = Enumerable.Range(0, table.Columns.Count).Select(i => Math.Max(table.Columns[i].Name.Length, values.Max(r => r[i] != null ? r[i].Length : 0))).ToList();
+			var columnWidths = Enumerable.Range(0, table.Columns.Count).Select(i => Math.Max(table.Columns[i].Name.Length, values.Max(r => r[i]?.Length) ?? 0)).ToList();
 
 			Console.WriteLine("*** {0} ***", table.Name);
 			Console.WriteLine();
