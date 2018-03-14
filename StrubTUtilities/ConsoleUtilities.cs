@@ -143,8 +143,7 @@ namespace StrubT {
 				var isNumeric = true;
 				var maxScale = 0;
 
-				for (var r = 0; r < table.Rows.Count; r++) {
-
+				for (var r = 0; r < table.Rows.Count; r++)
 					switch (table.Rows[r].Values[c]) {
 						case sbyte sb: var sql = new SqlDecimal(sb); goto PrintTable_SqlDecimal;
 						case byte ub: sql = new SqlDecimal(ub); goto PrintTable_SqlDecimal;
@@ -169,7 +168,6 @@ PrintTable_SqlDecimal:
 							isNumeric = false;
 							break;
 					}
-				}
 
 				return (IsNumeric: isNumeric, MaxScale: maxScale);
 			}).ToList();
@@ -180,7 +178,7 @@ PrintTable_SqlDecimal:
 				return v?.ToString();
 			}).ToList()).ToList();
 
-			var columnWidths = Enumerable.Range(0, table.Columns.Count).Select(i => Math.Max(table.Columns[i].Name.Length, values.Max(r => r[i] != null ? r[i].Length : 0))).ToList();
+			var columnWidths = Enumerable.Range(0, table.Columns.Count).Select(i => Math.Max(table.Columns[i].Name.Length, values.Max(r => r[i]?.Length) ?? 0)).ToList();
 
 			Console.WriteLine("*** {0} ***", table.Name);
 			Console.WriteLine();
