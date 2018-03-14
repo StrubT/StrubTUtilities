@@ -191,7 +191,7 @@ PrintTable_NotSqlDecimal:
 				return v != null ? v.ToString() : null;
 			}).ToList()).ToList();
 
-			var columnWidths = Enumerable.Range(0, table.Columns.Count).Select(i => Math.Max(table.Columns[i].Name.Length, values.Max(r => r[i] != null ? r[i].Length : 0))).ToList();
+			var columnWidths = Enumerable.Range(0, table.Columns.Count).Select(i => Math.Max(table.Columns[i].Name.Length, values.Select(r => r[i] != null ? r[i].Length : 0).DefaultIfEmpty(0).Max())).ToList();
 
 			Console.WriteLine("*** {0} ***", table.Name);
 			Console.WriteLine();
