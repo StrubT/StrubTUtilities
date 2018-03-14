@@ -5,6 +5,7 @@ This repository contains various helpful utilities that I currently use in a num
 ## Repository Contents
 
 All of the utilities are available in the following versions of the C# programming language:
+* C# 7.2 ([`csharp-71`](https://github.com/StrubT/StrubTUtilities/tree/csharp-72))
 * C# 7.1 ([`csharp-71`](https://github.com/StrubT/StrubTUtilities/tree/csharp-71))
 * C# 7.0 ([`csharp-70`](https://github.com/StrubT/StrubTUtilities/tree/csharp-70))
 * C# 6.0 ([`csharp-60`](https://github.com/StrubT/StrubTUtilities/tree/csharp-60))
