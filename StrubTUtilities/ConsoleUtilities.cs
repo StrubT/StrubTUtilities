@@ -123,7 +123,7 @@ namespace StrubT {
 
 			var cells = values.Select(l => {
 				var row = l.Select((v, i) => {
-					if (v is IFormattable formattable && formats != null && formats.Count >= i && !string.IsNullOrEmpty(formats[i]))
+					if (v is IFormattable formattable && formats?.Count >= i && !string.IsNullOrEmpty(formats[i]))
 						return (object)formattable.ToString(formats[i], null);
 					return v;
 				}).ToList();
