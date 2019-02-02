@@ -15,7 +15,7 @@ using System.Drawing;
 
 namespace StrubT {
 
-	static class ConsoleUtilities {
+	public static class ConsoleUtilities {
 
 		#region kernel32
 #if ENABLE_KERNEL32_DLL

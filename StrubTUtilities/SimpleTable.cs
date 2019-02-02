@@ -31,7 +31,7 @@ namespace StrubT {
 		IReadOnlyList<T> Values { get; }
 	}
 
-	class Table<T> : IReadOnlyTable<T> {
+	public class Table<T> : IReadOnlyTable<T> {
 
 		public string Name { get; }
 

@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace StrubT {
 
-	class ConsoleConfigResetter : IDisposable {
+	public class ConsoleConfigResetter : IDisposable {
 
 		static object @lock = new object();
 		bool lockTaken = false;
@@ -187,7 +187,7 @@ namespace StrubT {
 	}
 
 	[Flags]
-	enum ConsoleConfigScope {
+	public enum ConsoleConfigScope {
 
 		Colors = 0x1,
 		Title = 0x2,

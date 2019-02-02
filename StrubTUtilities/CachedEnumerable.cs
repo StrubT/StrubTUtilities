@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace StrubT {
 
-	class CachedEnumerable<T> : IEnumerable<T> {
+	public class CachedEnumerable<T> : IEnumerable<T> {
 
 		const CachingStrategy DefaultStrategy = CachingStrategy.SinglyLinkedList;
 
@@ -89,7 +89,7 @@ namespace StrubT {
 		#endregion
 	}
 
-	static class CachedEnumerableExtensions {
+	public static class CachedEnumerableExtensions {
 
 		public static IEnumerable<T> AsCached<T>(this IEnumerable<T> enumerable) => enumerable as CachedEnumerable<T> ?? new CachedEnumerable<T>(enumerable);
 

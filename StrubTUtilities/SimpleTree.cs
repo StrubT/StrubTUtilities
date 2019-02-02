@@ -19,7 +19,7 @@ namespace StrubT {
 		IReadOnlyCollection<IReadOnlyTreeNode<T>> Children { get; }
 	}
 
-	class Tree<T> : IReadOnlyTree<T>, IReadOnlyTreeNode<T> {
+	public class Tree<T> : IReadOnlyTree<T>, IReadOnlyTreeNode<T> {
 
 		string IReadOnlyTreeNode<T>.Label => Name;
 

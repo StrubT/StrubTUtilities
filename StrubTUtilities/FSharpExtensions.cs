@@ -8,7 +8,7 @@ using Microsoft.FSharp.Core;
 
 namespace StrubT {
 
-	static class FSharpExtensions {
+	public static class FSharpExtensions {
 
 		// OPTION //
 
@@ -50,7 +50,7 @@ namespace StrubT {
 
 		public static T2 GetChoice2<T1, T2>(this FSharpChoice<T1, T2> choice) => choice is FSharpChoice<T1, T2>.Choice2Of2 c ? c.Item : default;
 
-		#region other choices
+#region other choices
 
 		public static bool TryGetChoice<T1, T2, T3>(this FSharpChoice<T1, T2, T3> choice, int n, out object item) => TryGetChoiceHelper(choice, n, out item);
 
@@ -121,7 +121,7 @@ namespace StrubT {
 		public static T6 GetChoice6<T1, T2, T3, T4, T5, T6, T7>(this FSharpChoice<T1, T2, T3, T4, T5, T6, T7> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6, T7>.Choice6Of7 c ? c.Item : default;
 
 		public static T7 GetChoice7<T1, T2, T3, T4, T5, T6, T7>(this FSharpChoice<T1, T2, T3, T4, T5, T6, T7> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6, T7>.Choice7Of7 c ? c.Item : default;
-		#endregion
+#endregion
 
 		// COLLECTIONS //
 
@@ -129,7 +129,7 @@ namespace StrubT {
 
 		public static ISet<T> AsReadOnlySet<T>(this FSharpSet<T> set, bool allowExpensive = false) => new SetProxy<T>(set, allowExpensive);
 
-		#region collection proxies
+#region collection proxies
 
 		class ListProxy<T> : IReadOnlyList<T> {
 
@@ -210,7 +210,7 @@ namespace StrubT {
 
 			public override string ToString() => Set.ToString();
 		}
-		#endregion
+#endregion
 	}
 }
 #endif

@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace StrubT {
 
-	static class DataExtensions {
+	public static class DataExtensions {
 
 		public static IReadOnlyTable<object> AsReadOnly(this DataTable dataTable) {
 
