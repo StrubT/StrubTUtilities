@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net45;net472;netstandard2.0</TargetFrameworks>
+    <Configurations>Debug;Release-Minimal;Release-FSharp;Release-Console;Release-Full</Configurations>
+    <ApplicationIcon>StrubT.ico</ApplicationIcon>
+    <RootNamespace>StrubT</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Authors>StrubT</Authors>
+    <Version>2.0.0</Version>
+    <PackageProjectUrl>https://github.com/StrubT/StrubTUtilities</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/StrubT/StrubTUtilities</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/StrubT/StrubTUtilities/blob/master/LICENCE</PackageLicenseUrl>
+    <PackageIconUrl>https://strubt.ch/images/StrubT.png</PackageIconUrl>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.0'">
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+    <PackageReference Include="System.ValueTuple" Version="4.5.*" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="('$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Release-FSharp' Or '$(Configuration)' == 'Release-Full')">
+    <DefineConstants>ENABLE_FSHARP_CORE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup Condition="('$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Release-FSharp' Or '$(Configuration)' == 'Release-Full')">
+    <PackageReference Include="FSharp.Core" Version="4.6.*" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="('$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Release-FSharp' Or '$(Configuration)' == 'Release-Console') And '$(TargetFramework)' != 'netstandard2.0'">
+    <DefineConstants>ENABLE_KERNEL32_DLL;ENABLE_SYSTEM_DRAWING</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup Condition="('$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Release-FSharp' Or '$(Configuration)' == 'Release-Console') And '$(TargetFramework)' != 'netstandard2.0'">
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+
+</Project>
