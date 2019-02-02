@@ -20,5 +20,9 @@ namespace StrubT {
 			table.AddRows(dataTable.Rows.Cast<DataRow>().Select(r => dataTable.Columns.Cast<DataColumn>().Select(c => r.Field<T>(c)).ToList()));
 			return table;
 		}
+
+#if NETSTANDARD2_0
+		public static T Field<T>(this DataRow row, DataColumn column) => (T)row[column];
+#endif
 	}
 }
