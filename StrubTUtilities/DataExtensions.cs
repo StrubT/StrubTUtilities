@@ -22,7 +22,7 @@ namespace StrubT {
 		}
 
 #if NETSTANDARD2_0
-		public static T Field<T>(this DataRow row, DataColumn column) => (T)row[column];
+		static T Field<T>(this DataRow row, DataColumn column) => (T)row[column];
 #endif
 	}
 }
