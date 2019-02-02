@@ -7,7 +7,7 @@
     <RootNamespace>StrubT</RootNamespace>
     <LangVersion>latest</LangVersion>
     <Authors>StrubT</Authors>
-    <Version>2.0.0</Version>
+    <Version>2.0.1</Version>
     <PackageProjectUrl>https://github.com/StrubT/StrubTUtilities</PackageProjectUrl>
     <RepositoryUrl>https://github.com/StrubT/StrubTUtilities</RepositoryUrl>
     <PackageLicenseUrl>https://github.com/StrubT/StrubTUtilities/blob/master/LICENCE</PackageLicenseUrl>
