@@ -6,26 +6,26 @@ namespace StrubT {
 
 	class CachedEnumerable<T> : IEnumerable<T> {
 
-		const CachingStrategy defaultStrategy = CachingStrategy.SinglyLinkedList;
+		const CachingStrategy DefaultStrategy = CachingStrategy.SinglyLinkedList;
 
-		readonly IEnumerable<T> enumerable;
+		readonly IEnumerable<T> Enumerable;
 
-		public CachedEnumerable() => enumerable = null;
+		public CachedEnumerable() => Enumerable = null;
 
-		public CachedEnumerable(IEnumerable<T> enumerable, CachingStrategy strategy = defaultStrategy) : this(enumerable.GetEnumerator(), strategy) { }
+		public CachedEnumerable(IEnumerable<T> enumerable, CachingStrategy strategy = DefaultStrategy) : this(enumerable.GetEnumerator(), strategy) { }
 
-		public CachedEnumerable(IEnumerator<T> enumerator, CachingStrategy strategy = defaultStrategy) {
+		public CachedEnumerable(IEnumerator<T> enumerator, CachingStrategy strategy = DefaultStrategy) {
 
 			switch (strategy) {
-				case CachingStrategy.SinglyLinkedList: enumerable = new Impl_SinglyLinkedList(enumerator); break;
-				case CachingStrategy.ArrayList: enumerable = new Impl_ArrayList(enumerator); break;
+				case CachingStrategy.SinglyLinkedList: Enumerable = new Impl_SinglyLinkedList(enumerator); break;
+				case CachingStrategy.ArrayList: Enumerable = new Impl_ArrayList(enumerator); break;
 				default: throw new ArgumentException();
 			}
 		}
 
-		IEnumerator IEnumerable.GetEnumerator() => enumerable.GetEnumerator();
+		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-		public IEnumerator<T> GetEnumerator() => enumerable.GetEnumerator();
+		public IEnumerator<T> GetEnumerator() => Enumerable.GetEnumerator();
 
 		#region strategy implementations
 
@@ -36,10 +36,6 @@ namespace StrubT {
 			bool? isEmpty;
 			T current;
 			Impl_SinglyLinkedList next;
-
-			//public Impl_SinglyLinkedList(object @lock = null) => (isEmpty, this.@lock) = (true, @lock);
-
-			//public Impl_SinglyLinkedList(IEnumerable<T> enumerable, object @lock = null) : this(enumerable.GetEnumerator(), @lock) { }
 
 			public Impl_SinglyLinkedList(IEnumerator<T> enumerator, object @lock = null) => (this.enumerator, this.@lock) = (enumerator, @lock ?? new object());
 
