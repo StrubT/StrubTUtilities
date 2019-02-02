@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net45;net472;netstandard2.0</TargetFrameworks>
-    <Configurations>Debug;Release-Minimal;Release-FSharp;Release-Console;Release-Full</Configurations>
+    <Configurations>Debug;Release;Release-Minimal;Release-FSharp;Release-Console</Configurations>
     <ApplicationIcon>StrubT.ico</ApplicationIcon>
     <RootNamespace>StrubT</RootNamespace>
     <LangVersion>latest</LangVersion>
@@ -24,17 +24,17 @@
     <PackageReference Include="System.ValueTuple" Version="4.5.*" />
   </ItemGroup>
 
-  <PropertyGroup Condition="('$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Release-FSharp' Or '$(Configuration)' == 'Release-Full')">
-    <DefineConstants>ENABLE_FSHARP_CORE</DefineConstants>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Release' Or '$(Configuration)' == 'Release-FSharp'">
+    <DefineConstants>$(DefineConstants);ENABLE_FSHARP_CORE</DefineConstants>
   </PropertyGroup>
-  <ItemGroup Condition="('$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Release-FSharp' Or '$(Configuration)' == 'Release-Full')">
+  <ItemGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Release' Or '$(Configuration)' == 'Release-FSharp'">
     <PackageReference Include="FSharp.Core" Version="4.6.*" />
   </ItemGroup>
 
-  <PropertyGroup Condition="('$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Release-FSharp' Or '$(Configuration)' == 'Release-Console') And '$(TargetFramework)' != 'netstandard2.0'">
-    <DefineConstants>ENABLE_KERNEL32_DLL;ENABLE_SYSTEM_DRAWING</DefineConstants>
+  <PropertyGroup Condition="('$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Release' Or '$(Configuration)' == 'Release-Console') And '$(TargetFramework)' != 'netstandard2.0'">
+    <DefineConstants>$(DefineConstants);ENABLE_KERNEL32_DLL;ENABLE_SYSTEM_DRAWING</DefineConstants>
   </PropertyGroup>
-  <ItemGroup Condition="('$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Release-FSharp' Or '$(Configuration)' == 'Release-Console') And '$(TargetFramework)' != 'netstandard2.0'">
+  <ItemGroup Condition="('$(Configuration)' == 'Debug' Or '$(Configuration)' == 'Release' Or '$(Configuration)' == 'Release-Console') And '$(TargetFramework)' != 'netstandard2.0'">
     <Reference Include="System.Drawing" />
   </ItemGroup>
 

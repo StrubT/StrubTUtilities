@@ -13,7 +13,7 @@ The repository contains a single library that can be compiled using several conf
 | `Release-Minimal` | minimal build | `System.ValueTuple` *(.NET Framework 4.5 only)* |
 | `Release-FSharp` | additional F# utilities | `FSharp.Core` |
 | `Release-Console` | advanced console utilities | `kernel32.dll` and `System.Drawing` |
-| `Release-Full`<br>`Debug` | full build | all of the above |
+| `Release`<br>`Debug` | full build | all of the above |
 
 ### Supported Target Frameworks
 
