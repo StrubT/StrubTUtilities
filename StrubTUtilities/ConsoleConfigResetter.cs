@@ -7,9 +7,9 @@ namespace StrubT {
 
 	public class ConsoleConfigResetter : IDisposable {
 
-		static object @lock = new object();
-		bool lockTaken = false;
-		bool disposed = false;
+		static object Lock = new object();
+		bool LockTaken = false;
+		bool Disposed = false;
 
 		#region console configuration fields
 
@@ -57,7 +57,7 @@ namespace StrubT {
 		public ConsoleConfigResetter(ConsoleConfigScope scope = ConsoleConfigScope.Safe, bool locked = false) {
 
 			if (locked)
-				Monitor.Enter(@lock, ref lockTaken);
+				Monitor.Enter(Lock, ref LockTaken);
 
 			Scope = scope;
 
@@ -122,7 +122,7 @@ namespace StrubT {
 
 		protected virtual void Dispose(bool disposing) {
 
-			if (disposed)
+			if (Disposed)
 				return;
 
 			if (disposing) {
@@ -177,12 +177,12 @@ namespace StrubT {
 				}
 			}
 
-			if (lockTaken) {
-				Monitor.Exit(@lock);
-				lockTaken = false;
+			if (LockTaken) {
+				Monitor.Exit(Lock);
+				LockTaken = false;
 			}
 
-			disposed = true;
+			Disposed = true;
 		}
 	}
 
