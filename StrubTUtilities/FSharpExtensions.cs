@@ -3,6 +3,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using Microsoft.FSharp.Collections;
 using Microsoft.FSharp.Core;
 
@@ -50,7 +51,7 @@ namespace StrubT {
 
 		public static T2 GetChoice2<T1, T2>(this FSharpChoice<T1, T2> choice) => choice is FSharpChoice<T1, T2>.Choice2Of2 c ? c.Item : default;
 
-#region other choices
+		#region more choices
 
 		public static bool TryGetChoice<T1, T2, T3>(this FSharpChoice<T1, T2, T3> choice, int n, out object item) => TryGetChoiceHelper(choice, n, out item);
 
@@ -121,64 +122,56 @@ namespace StrubT {
 		public static T6 GetChoice6<T1, T2, T3, T4, T5, T6, T7>(this FSharpChoice<T1, T2, T3, T4, T5, T6, T7> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6, T7>.Choice6Of7 c ? c.Item : default;
 
 		public static T7 GetChoice7<T1, T2, T3, T4, T5, T6, T7>(this FSharpChoice<T1, T2, T3, T4, T5, T6, T7> choice) => choice is FSharpChoice<T1, T2, T3, T4, T5, T6, T7>.Choice7Of7 c ? c.Item : default;
-#endregion
+		#endregion
 
-		// COLLECTIONS //
+		// FSHARPSET / ISET //
 
-		public static IReadOnlyList<T> AsReadOnly<T>(this FSharpList<T> list) => new ListProxy<T>(list);
+		public static ISet<T> AsReadOnlySet<T>(this FSharpSet<T> set) => new SetProxy<T>(set);
 
-		public static ISet<T> AsReadOnlySet<T>(this FSharpSet<T> set, bool allowExpensive = false) => new SetProxy<T>(set, allowExpensive);
-
-#region collection proxies
-
-		class ListProxy<T> : IReadOnlyList<T> {
-
-			FSharpList<T> List { get; }
-
-			public ListProxy(FSharpList<T> list) => List = list;
-
-			T IReadOnlyList<T>.this[int index] => List[index];
-
-			int IReadOnlyCollection<T>.Count => List.Length;
-
-			IEnumerator<T> IEnumerable<T>.GetEnumerator() => ((IEnumerable<T>)List).GetEnumerator();
-
-			IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<T>)List).GetEnumerator();
-
-			public override int GetHashCode() => List.GetHashCode();
-
-			public override bool Equals(object obj) => List.Equals(obj);
-
-			public override string ToString() => List.ToString();
-		}
+		#region set proxies
 
 		class SetProxy<T> : ISet<T> {
 
-			FSharpSet<T> Set { get; }
+			readonly FSharpSet<T> FSharpSet;
+			readonly Lazy<HashSet<T>> HashSet;
 
-			bool AllowExpensive { get; }
+			public int Count => FSharpSet.Count;
 
-			public SetProxy(FSharpSet<T> set, bool allowExpensive = false) => (Set, AllowExpensive) = (set, allowExpensive);
+			bool ICollection<T>.IsReadOnly => true;
 
-			FSharpSet<T> CreateFSharpSet(IEnumerable<T> enumerable) => enumerable as FSharpSet<T> ?? (AllowExpensive ? new FSharpSet<T>(enumerable) : throw new InvalidOperationException("Expensive operations have been disabled."));
+			public SetProxy(FSharpSet<T> set) => (FSharpSet, HashSet) = (set, new Lazy<HashSet<T>>(() => new HashSet<T>(FSharpSet), LazyThreadSafetyMode.ExecutionAndPublication));
 
-			ISet<T> CreateISet(IEnumerable<T> enumerable) => enumerable is ISet<T> s && !(enumerable is SetProxy<T>) ? s : AllowExpensive ? new HashSet<T>(enumerable) : throw new InvalidOperationException("Expensive operations have been disabled.");
+			public IEnumerator<T> GetEnumerator() => ((IEnumerable<T>)FSharpSet).GetEnumerator();
 
-			IEnumerator<T> IEnumerable<T>.GetEnumerator() => ((IEnumerable<T>)Set).GetEnumerator();
+			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-			IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<T>)Set).GetEnumerator();
+			public bool Contains(T item) => FSharpSet.Contains(item);
+
+			void ICollection<T>.CopyTo(T[] array, int arrayIndex) => HashSet.Value.CopyTo(array, arrayIndex);
+
+			bool ISet<T>.IsProperSubsetOf(IEnumerable<T> other) => HashSet.Value.IsProperSubsetOf(other);
+
+			bool ISet<T>.IsProperSupersetOf(IEnumerable<T> other) => HashSet.Value.IsProperSupersetOf(other);
+
+			bool ISet<T>.IsSubsetOf(IEnumerable<T> other) => HashSet.Value.IsSubsetOf(other);
+
+			bool ISet<T>.IsSupersetOf(IEnumerable<T> other) => HashSet.Value.IsSupersetOf(other);
+
+			bool ISet<T>.Overlaps(IEnumerable<T> other) => HashSet.Value.Overlaps(other);
+
+			bool ISet<T>.SetEquals(IEnumerable<T> other) => HashSet.Value.SetEquals(other);
+
+			public override int GetHashCode() => FSharpSet.GetHashCode();
+
+			public override bool Equals(object obj) => FSharpSet.Equals(obj);
+
+			public override string ToString() => FSharpSet.ToString();
+
+			#region read-only proxies
 
 			void ICollection<T>.Add(T item) => throw new NotSupportedException("This collection is read-only.");
 
 			void ICollection<T>.Clear() => throw new NotSupportedException("This collection is read-only.");
-
-			bool ICollection<T>.Contains(T item) => Set.Contains(item);
-
-			void ICollection<T>.CopyTo(T[] array, int arrayIndex) => throw new NotSupportedException("This collection is read-only.");
-
-			int ICollection<T>.Count => Set.Count;
-
-			bool ICollection<T>.IsReadOnly => true;
 
 			bool ICollection<T>.Remove(T item) => throw new NotSupportedException("This collection is read-only.");
 
@@ -188,29 +181,12 @@ namespace StrubT {
 
 			void ISet<T>.IntersectWith(IEnumerable<T> other) => throw new NotSupportedException("This collection is read-only.");
 
-			bool ISet<T>.IsProperSubsetOf(IEnumerable<T> other) => Set.IsProperSubsetOf(CreateFSharpSet(other));
-
-			bool ISet<T>.IsProperSupersetOf(IEnumerable<T> other) => Set.IsProperSupersetOf(CreateFSharpSet(other));
-
-			bool ISet<T>.IsSubsetOf(IEnumerable<T> other) => Set.IsSubsetOf(CreateFSharpSet(other));
-
-			bool ISet<T>.IsSupersetOf(IEnumerable<T> other) => Set.IsSupersetOf(CreateFSharpSet(other));
-
-			bool ISet<T>.Overlaps(IEnumerable<T> other) => CreateISet(other).Overlaps(Set);
-
-			bool ISet<T>.SetEquals(IEnumerable<T> other) => CreateISet(other).SetEquals(Set);
-
 			void ISet<T>.SymmetricExceptWith(IEnumerable<T> other) => throw new NotSupportedException("This collection is read-only.");
 
 			void ISet<T>.UnionWith(IEnumerable<T> other) => throw new NotSupportedException("This collection is read-only.");
-
-			public override int GetHashCode() => Set.GetHashCode();
-
-			public override bool Equals(object obj) => Set.Equals(obj);
-
-			public override string ToString() => Set.ToString();
+			#endregion
 		}
-#endregion
+		#endregion
 	}
 }
 #endif

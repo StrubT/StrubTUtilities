@@ -4,29 +4,59 @@ using System.Collections.Generic;
 
 namespace StrubT {
 
+	public enum ReadOnlyBehaviour { CastIfPossible, CreateProxy, CopyElements }
+
 	public static class ReadOnlyExtensions {
 
-		public static IReadOnlyCollection<T> AsReadOnly<T>(this ICollection<T> collection) => collection as IReadOnlyCollection<T> ?? new CollectionProxy<T>(collection);
+		public static IReadOnlyCollection<T> AsReadOnly<T>(this ICollection<T> collection, ReadOnlyBehaviour behaviour = ReadOnlyBehaviour.CastIfPossible) {
+			switch (behaviour) {
+				case ReadOnlyBehaviour.CastIfPossible: return collection as IReadOnlyCollection<T> ?? new CollectionProxy<T>(collection);
+				case ReadOnlyBehaviour.CreateProxy: return new CollectionProxy<T>(collection);
+				case ReadOnlyBehaviour.CopyElements: return new List<T>(collection);
+				default: throw new ArgumentException();
+			}
+		}
 
-		public static IReadOnlyList<T> AsReadOnly<T>(this IList<T> list) => list as IReadOnlyList<T> ?? new ListProxy<T>(list);
+		public static IReadOnlyList<T> AsReadOnly<T>(this IList<T> list, ReadOnlyBehaviour behaviour = ReadOnlyBehaviour.CastIfPossible) {
+			switch (behaviour) {
+				case ReadOnlyBehaviour.CastIfPossible: return list as IReadOnlyList<T> ?? new ListProxy<T>(list);
+				case ReadOnlyBehaviour.CreateProxy: return new ListProxy<T>(list);
+				case ReadOnlyBehaviour.CopyElements: return new List<T>(list);
+				default: throw new ArgumentException();
+			}
+		}
 
-		public static ISet<T> AsReadOnlySet<T>(this ISet<T> set) => set.IsReadOnly ? set : new SetProxy<T>(set);
+		public static IReadOnlyDictionary<TKey, TValue> AsReadOnly<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, ReadOnlyBehaviour behaviour = ReadOnlyBehaviour.CastIfPossible) {
+			switch (behaviour) {
+				case ReadOnlyBehaviour.CastIfPossible: return dictionary as IReadOnlyDictionary<TKey, TValue> ?? new DictionaryProxy<TKey, TValue>(dictionary);
+				case ReadOnlyBehaviour.CreateProxy: return new DictionaryProxy<TKey, TValue>(dictionary);
+				case ReadOnlyBehaviour.CopyElements: return new Dictionary<TKey, TValue>(dictionary);
+				default: throw new ArgumentException();
+			}
+		}
 
-		public static IReadOnlyDictionary<K, V> AsReadOnly<K, V>(this IDictionary<K, V> dictionary) => dictionary as IReadOnlyDictionary<K, V> ?? new DictionaryProxy<K, V>(dictionary);
+		public static ISet<T> AsReadOnlySet<T>(this ISet<T> set, ReadOnlyBehaviour behaviour = ReadOnlyBehaviour.CreateProxy) {
+			switch (behaviour) {
+				case ReadOnlyBehaviour.CastIfPossible:
+				case ReadOnlyBehaviour.CreateProxy: return new SetProxy<T>(set);
+				case ReadOnlyBehaviour.CopyElements: return new SetProxy<T>(new HashSet<T>(set));
+				default: throw new ArgumentException();
+			}
+		}
 
 		#region read-only proxies
 
 		class CollectionProxy<T> : IReadOnlyCollection<T> {
 
-			ICollection<T> Collection { get; }
+			readonly ICollection<T> Collection;
+
+			public int Count => Collection.Count;
 
 			public CollectionProxy(ICollection<T> collection) => Collection = collection;
 
-			IEnumerator IEnumerable.GetEnumerator() => Collection.GetEnumerator();
+			public IEnumerator<T> GetEnumerator() => Collection.GetEnumerator();
 
-			IEnumerator<T> IEnumerable<T>.GetEnumerator() => Collection.GetEnumerator();
-
-			int IReadOnlyCollection<T>.Count => Collection.Count;
+			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
 			public override int GetHashCode() => Collection.GetHashCode();
 
@@ -37,34 +67,59 @@ namespace StrubT {
 
 		class ListProxy<T> : CollectionProxy<T>, IReadOnlyList<T> {
 
-			IList<T> List { get; }
+			readonly IList<T> List;
+
+			public T this[int index] => List[index];
 
 			public ListProxy(IList<T> list) : base(list) => List = list;
-
-			T IReadOnlyList<T>.this[int index] => List[index];
 		}
 
-		class SetProxy<T> : ISet<T> {
+		class DictionaryProxy<TKey, TValue> : CollectionProxy<KeyValuePair<TKey, TValue>>, IReadOnlyDictionary<TKey, TValue> {
 
-			ISet<T> Set { get; }
+			readonly IDictionary<TKey, TValue> Dictionary;
 
-			public SetProxy(ISet<T> set) => Set = set;
+			public IEnumerable<TKey> Keys => Dictionary.Keys;
 
-			IEnumerator<T> IEnumerable<T>.GetEnumerator() => Set.GetEnumerator();
+			public IEnumerable<TValue> Values => Dictionary.Values;
 
-			IEnumerator IEnumerable.GetEnumerator() => Set.GetEnumerator();
+			public TValue this[TKey key] => Dictionary[key];
+
+			public bool ContainsKey(TKey key) => Dictionary.ContainsKey(key);
+
+			public bool TryGetValue(TKey key, out TValue value) => Dictionary.TryGetValue(key, out value);
+
+			public DictionaryProxy(IDictionary<TKey, TValue> dictionary) : base(dictionary) => Dictionary = dictionary;
+		}
+
+		class SetProxy<T> : CollectionProxy<T>, ISet<T> {
+
+			readonly ISet<T> Set;
+
+			bool ICollection<T>.IsReadOnly => true;
+
+			public SetProxy(ISet<T> set) : base(set) => Set = set;
+
+			public bool Contains(T item) => Set.Contains(item);
+
+			public void CopyTo(T[] array, int arrayIndex) => Set.CopyTo(array, arrayIndex);
+
+			public bool IsProperSubsetOf(IEnumerable<T> other) => Set.IsProperSubsetOf(other);
+
+			public bool IsProperSupersetOf(IEnumerable<T> other) => Set.IsProperSupersetOf(other);
+
+			public bool IsSubsetOf(IEnumerable<T> other) => Set.IsSubsetOf(other);
+
+			public bool IsSupersetOf(IEnumerable<T> other) => Set.IsSupersetOf(other);
+
+			public bool Overlaps(IEnumerable<T> other) => Set.Overlaps(other);
+
+			public bool SetEquals(IEnumerable<T> other) => Set.SetEquals(other);
+
+			#region not supported, read-only
 
 			void ICollection<T>.Add(T item) => throw new NotSupportedException("This collection is read-only.");
 
 			void ICollection<T>.Clear() => throw new NotSupportedException("This collection is read-only.");
-
-			bool ICollection<T>.Contains(T item) => Set.Contains(item);
-
-			void ICollection<T>.CopyTo(T[] array, int arrayIndex) => throw new NotSupportedException("This collection is read-only.");
-
-			int ICollection<T>.Count => Set.Count;
-
-			bool ICollection<T>.IsReadOnly => true;
 
 			bool ICollection<T>.Remove(T item) => throw new NotSupportedException("This collection is read-only.");
 
@@ -74,44 +129,10 @@ namespace StrubT {
 
 			void ISet<T>.IntersectWith(IEnumerable<T> other) => throw new NotSupportedException("This collection is read-only.");
 
-			bool ISet<T>.IsProperSubsetOf(IEnumerable<T> other) => Set.IsProperSubsetOf(other);
-
-			bool ISet<T>.IsProperSupersetOf(IEnumerable<T> other) => Set.IsProperSupersetOf(other);
-
-			bool ISet<T>.IsSubsetOf(IEnumerable<T> other) => Set.IsSubsetOf(other);
-
-			bool ISet<T>.IsSupersetOf(IEnumerable<T> other) => Set.IsSupersetOf(other);
-
-			bool ISet<T>.Overlaps(IEnumerable<T> other) => Set.Overlaps(other);
-
-			bool ISet<T>.SetEquals(IEnumerable<T> other) => Set.SetEquals(other);
-
 			void ISet<T>.SymmetricExceptWith(IEnumerable<T> other) => throw new NotSupportedException("This collection is read-only.");
 
 			void ISet<T>.UnionWith(IEnumerable<T> other) => throw new NotSupportedException("This collection is read-only.");
-
-			public override int GetHashCode() => Set.GetHashCode();
-
-			public override bool Equals(object obj) => Set.Equals(obj);
-
-			public override string ToString() => Set.ToString();
-		}
-
-		class DictionaryProxy<K, V> : CollectionProxy<KeyValuePair<K, V>>, IReadOnlyDictionary<K, V> {
-
-			IDictionary<K, V> Dictionary { get; }
-
-			public DictionaryProxy(IDictionary<K, V> dictionary) : base(dictionary) => Dictionary = dictionary;
-
-			IEnumerable<K> IReadOnlyDictionary<K, V>.Keys => Dictionary.Keys;
-
-			IEnumerable<V> IReadOnlyDictionary<K, V>.Values => Dictionary.Values;
-
-			V IReadOnlyDictionary<K, V>.this[K key] => Dictionary[key];
-
-			bool IReadOnlyDictionary<K, V>.ContainsKey(K key) => Dictionary.ContainsKey(key);
-
-			bool IReadOnlyDictionary<K, V>.TryGetValue(K key, out V value) => Dictionary.TryGetValue(key, out value);
+			#endregion
 		}
 		#endregion
 	}
