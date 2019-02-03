@@ -6,7 +6,7 @@ namespace StrubT {
 
 	public class CachedEnumerable<T> : IEnumerable<T> {
 
-		const CachingStrategy DefaultStrategy = CachingStrategy.SinglyLinkedList;
+		const CachingStrategy DefaultStrategy = CachingStrategy.ArrayList;
 
 		readonly IEnumerable<T> Enumerable;
 
@@ -17,8 +17,8 @@ namespace StrubT {
 		public CachedEnumerable(IEnumerator<T> enumerator, CachingStrategy strategy = DefaultStrategy) {
 
 			switch (strategy) {
-				case CachingStrategy.SinglyLinkedList: Enumerable = new Impl_SinglyLinkedList(enumerator); break;
-				case CachingStrategy.ArrayList: Enumerable = new Impl_ArrayList(enumerator); break;
+				case CachingStrategy.SinglyLinkedList: Enumerable = new ImplSinglyLinkedList(enumerator); break;
+				case CachingStrategy.ArrayList: Enumerable = new ImplArrayList(enumerator); break;
 				default: throw new ArgumentException();
 			}
 		}
@@ -29,15 +29,15 @@ namespace StrubT {
 
 		#region strategy implementations
 
-		class Impl_SinglyLinkedList : IEnumerable<T> {
+		class ImplSinglyLinkedList : IEnumerable<T> {
 
-			readonly object @lock;
-			IEnumerator<T> enumerator;
-			bool? isEmpty;
-			T current;
-			Impl_SinglyLinkedList next;
+			readonly object Lock;
+			IEnumerator<T> Enumerator;
+			bool? IsEmpty;
+			T Current;
+			ImplSinglyLinkedList Next;
 
-			public Impl_SinglyLinkedList(IEnumerator<T> enumerator, object @lock = null) => (this.enumerator, this.@lock) = (enumerator, @lock ?? new object());
+			public ImplSinglyLinkedList(IEnumerator<T> enumerator, object @lock = null) => (Enumerator, Lock) = (enumerator, @lock ?? new object());
 
 			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
@@ -45,28 +45,28 @@ namespace StrubT {
 
 				var cache = this;
 				while (true) {
-					lock (@lock)
-						if (!cache.isEmpty.HasValue && !(cache.isEmpty = !cache.enumerator.MoveNext()).Value) {
-							cache.current = cache.enumerator.Current;
-							cache.next = new Impl_SinglyLinkedList(cache.enumerator, @lock);
-							cache.enumerator = null;
+					lock (Lock)
+						if (!cache.IsEmpty.HasValue && !(cache.IsEmpty = !cache.Enumerator.MoveNext()).Value) {
+							cache.Current = cache.Enumerator.Current;
+							cache.Next = new ImplSinglyLinkedList(cache.Enumerator, Lock);
+							cache.Enumerator = null;
 						}
 
-					if (cache.isEmpty.Value)
+					if (cache.IsEmpty.Value)
 						yield break;
 
-					yield return cache.current;
-					cache = cache.next;
+					yield return cache.Current;
+					cache = cache.Next;
 				}
 			}
 		}
 
-		class Impl_ArrayList : IEnumerable<T> {
+		class ImplArrayList : IEnumerable<T> {
 
-			readonly IEnumerator<T> enumerator;
-			readonly List<T> list = new List<T>();
+			readonly IEnumerator<T> Enumerator;
+			readonly List<T> List = new List<T>();
 
-			public Impl_ArrayList(IEnumerator<T> enumerator) => this.enumerator = enumerator;
+			public ImplArrayList(IEnumerator<T> enumerator) => Enumerator = enumerator;
 
 			IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
@@ -74,15 +74,15 @@ namespace StrubT {
 
 				var i = 0;
 				while (true) {
-					lock (enumerator)
-						if (list.Count <= i) {
-							if (!enumerator.MoveNext())
+					lock (Enumerator)
+						if (List.Count <= i) {
+							if (!Enumerator.MoveNext())
 								yield break;
 
-							list.Add(enumerator.Current);
+							List.Add(Enumerator.Current);
 						}
 
-					yield return list[i++];
+					yield return List[i++];
 				}
 			}
 		}
