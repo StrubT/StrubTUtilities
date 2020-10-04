@@ -21,7 +21,7 @@ namespace StrubT {
 			return table;
 		}
 
-#if NETSTANDARD2_0
+#if NETSTANDARD2_1
 		static T Field<T>(this DataRow row, DataColumn column) => (T)row[column];
 #endif
 	}

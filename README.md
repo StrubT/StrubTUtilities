@@ -21,7 +21,8 @@ The repository contains a single library that can be compiled using several conf
 |:--- |:--- |
 | **.NET Framework 4.5** | – |
 | **.NET Framework 4.7.2** | – |
-| **.NET Standard 2.0** | does not support advanced console utilities |
+| **.NET Framework 4.8** | – |
+| **.NET Standard 2.1** | does not support advanced console utilities |
 
 ## Usage
 
